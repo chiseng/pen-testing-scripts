@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#Run file as following: scanning_script.py <target host IP> y (if you want dirs to be created to store stuff)
 import subprocess
 import nmap
 import sys
@@ -14,16 +15,16 @@ def processor(process): #huge creds to phi10s
     sys.stdout.write(readline)
     sys.stdout.flush()
     return output
-
-try:
-    subprocess.call(['mkdir',sys.argv[1]])
-    subprocess.call(['cd',sys.argv[1]])
-    subprocess.call(['mkdir','scripts'])
-    subprocess.call(['mkdir','exploits'])
-    subprocess.call(['mkdir','scans'])
-except Exception, e:
-    print('Directory not created')
-print('')
+if(sys.argv[3]=='y'):
+    try:
+        subprocess.call(['mkdir',sys.argv[1]])
+        subprocess.call(['cd',sys.argv[1]])
+        subprocess.call(['mkdir','scripts'])
+        subprocess.call(['mkdir','exploits'])
+        subprocess.call(['mkdir','scans'])
+	print('')
+    except Exception, e:
+        print('Directory not created')
 print('===========================================') #i was too lazy to make one for nmap :<
 print('Nmap service running')
 nm=nmap.PortScanner()
