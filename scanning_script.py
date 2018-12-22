@@ -7,8 +7,9 @@ import nmap
 import sys
 try:
     target=sys.argv[1]
+    portrange=sys.argv[2]
 except IndexError:
-    print('Example: ./scanning_script.py 1.3.3.7 <y>')
+    print('Example: ./scanning_script.py 1.3.3.7 40-443 (y to create new dir)')
     sys.exit(-1) #exit when error
 
     
@@ -40,7 +41,7 @@ except IndexError:
 print('===========================================') #i was too lazy to make one for nmap :<
 print('Nmap service running')
 nm=nmap.PortScanner()
-nm.scan(sys.argv[1], '10-8080') #scan ip, ports
+nm.scan(target, portrange) #scan ip, ports
 host=nm.all_hosts()[0]
 port80=[]
 for protocol in nm[host].all_protocols():
