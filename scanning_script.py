@@ -5,14 +5,17 @@
 import subprocess
 import nmap
 import sys
+import glob
+import os
+
 try:
     target=sys.argv[1]
     portrange=sys.argv[2]
 except IndexError:
-    print('Example: ./scanning_script.py 1.3.3.7 40-443 (y to create new dir)')
+    print('Example: ./scanning_script.py 1.3.3.7 80-445 <y>')
     sys.exit(-1) #exit when error
 
-    
+#use pipelining to ensure the process run correctly. 
 def processor(process): #huge creds to phi10s 
     output=""
     while process.poll() is None:
@@ -24,14 +27,17 @@ def processor(process): #huge creds to phi10s
     sys.stdout.write(readline)
     sys.stdout.flush()
     return output
+
 try:
-    if(sys.argv[2]=='y'):
+    wd=os.getcwd() #get current working dir to change back
+    if(sys.argv[3]=='y'):
         try:
             subprocess.call(['mkdir',sys.argv[1]])
-            subprocess.call(['cd',sys.argv[1]])
+	    os.chdir(sys.argv[1])	
             subprocess.call(['mkdir','scripts'])
             subprocess.call(['mkdir','exploits'])
             subprocess.call(['mkdir','scans'])
+	    os.chdir(wd)
 	    print('')
         except OSError, e:
             print('Directory not created')
@@ -67,7 +73,8 @@ if 80 in port80:
 	+'\n \____||__||__||__| __|\__\___|   ')
     wordlist = "/usr/share/seclists/Discovery/Web-Content/common.txt"
     url="http://"+str(host)
-    processor(subprocess.Popen(['gobuster','-u',url,'-w',wordlist],stdout=subprocess.PIPE))
+    errorcodes='200,204,301,302,307,403,500'
+    processor(subprocess.Popen(['gobuster','-u',url,'-w',wordlist, '-s',errorcodes, '-e'], stdout=subprocess.PIPE))
     print('')
     print('Get another drink')
     print('\n _   _         _______ _____'
@@ -75,5 +82,5 @@ if 80 in port80:
 	+'\n|  \| ||  ||_/   | |  | _|_ |'
 	+'\n|  .  ||  || \   | |  |  |  |'
 	+'\n|_| \_||__||  \  | |  |_____|')
-    processor(subprocess.Popen(['nikto','-h',url], stdout=subprocess.PIPE))
+    processor(subprocess.Popen(['nikto','-h',url],stdout=subprocess.PIPE))
 
