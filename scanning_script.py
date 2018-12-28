@@ -48,12 +48,12 @@ print('Nmap service running')
 target=sys.argv[1]
 nm=nmap.PortScanner()
 nm.scan(hosts=target, arguments='-sV') #print product, state, version, name
-print "Port\tState\tVersion\tType\tService"
+print("Port\tState\tVersion\tType\tService")
 ports=nm[target]['tcp']
 portlist=[]
 for port in ports:
     portlist.append(port)
-    print "\n%s\t%s\t%s\t%s\t%s" % (port, ports[port]['state'], ports[port]['version'], ports[port]['name'], ports[port]['product'])
+    print("\n%s\t%s\t%s\t%s\t%s" % (port, ports[port]['state'], ports[port]['version'], ports[port]['name'], ports[port]['product']))
 print('===========================================')
 print('')
 if '80' in portlist:
@@ -68,7 +68,7 @@ if '80' in portlist:
     errorcodes='200,204,301,302,307,403,500'
     processor(subprocess.Popen(['gobuster','-u',url,'-w',wordlist, '-s',errorcodes, '-e'], stdout=subprocess.PIPE))
     print('')
-    print('Get another drink, this shit's gonna hurt')
+    print("Get another drink, this shit's gonna hurt")
     print('\n _   _         _______ _____'
 	+'\n| \ | | [] |  /__   __|     |'
 	+'\n|  \| ||  ||_/   | |  | _|_ |'
