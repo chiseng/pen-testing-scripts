@@ -53,7 +53,7 @@ ports=nm[target]['tcp']
 portlist=[]
 for port in ports:
     portlist.append(port)
-    print "\n%s\t%s\t%s\t\t%s\t%s" % (port, ports[port]['state'], ports[port]['version'], ports[port]['name'], ports[port]['product'])
+    print "\n%s\t%s\t%s\t%s\t%s" % (port, ports[port]['state'], ports[port]['version'], ports[port]['name'], ports[port]['product'])
 print('===========================================')
 print('')
 if '80' in portlist:
@@ -64,11 +64,11 @@ if '80' in portlist:
 	+'\n|  |_ ||  ||  ||  ||__ |  / _\|   '
 	+'\n \____||__||__||__| __|\__\___|   ')
     wordlist = "/usr/share/seclists/Discovery/Web-Content/common.txt"
-    url="http://"+str(host)
+    url="http://"+str(target)
     errorcodes='200,204,301,302,307,403,500'
     processor(subprocess.Popen(['gobuster','-u',url,'-w',wordlist, '-s',errorcodes, '-e'], stdout=subprocess.PIPE))
     print('')
-    print('Get another drink')
+    print('Get another drink, this shit's gonna hurt')
     print('\n _   _         _______ _____'
 	+'\n| \ | | [] |  /__   __|     |'
 	+'\n|  \| ||  ||_/   | |  | _|_ |'
