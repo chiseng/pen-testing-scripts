@@ -10,9 +10,8 @@ import os
 
 try:
     target=sys.argv[1]
-    portrange=sys.argv[2]
 except IndexError:
-    print('Example: ./scanning_script.py 1.3.3.7 80-445 <y>')
+    print('Example: ./scanning_script.py <rhost> <y to create custom folders>')
     sys.exit(-1) #exit when error
 
 #use pipelining to ensure the process run correctly. 
@@ -21,7 +20,7 @@ def processor(process): #huge creds to phi10s
     while process.poll() is None:
     	readline=process.stdout.readline()
     	output+=readline
-    	sys.stdout.write(readline)
+    	sys.stdout.write(readline) #write the output from process
     readline=process.stdout.read()
     output+=readline
     sys.stdout.write(readline)
@@ -30,7 +29,7 @@ def processor(process): #huge creds to phi10s
 
 try:
     wd=os.getcwd() #get current working dir to change back
-    if(sys.argv[3]=='y'):
+    if(sys.argv[2]=='y'):
         try:
             subprocess.call(['mkdir',sys.argv[1]])
 	    os.chdir(sys.argv[1])	
@@ -46,25 +45,16 @@ except IndexError:
     pass
 print('===========================================') #i was too lazy to make one for nmap :<
 print('Nmap service running')
+target=sys.argv[1]
 nm=nmap.PortScanner()
-nm.scan(target, portrange) #scan ip, ports
-host=nm.all_hosts()[0]
-port80=[]
-for protocol in nm[host].all_protocols():
-    print('Protocol : %s' % protocol)
-    lport = nm[host][protocol].keys()
-    lport.sort()
-    for port in lport:
-        port80.append(port)
-        if(port==21):
-            print('port : %s\tstate : %s (FTP Service)' % (port, nm[host][protocol][port]['state']))
-        elif(port==80):
-            print('port : %s\tstate : %s (HTTP Service)' % (port, nm[host][protocol][port]['state']))
-        else:
-            print ('port : %s\tstate : %s' % (port, nm[host][protocol][port]['state']))
+nm.scan(hosts=target, arguments='-sV') #print product, state, version, name
+print "Port\tState\tVersion\tType\t\tService"
+ports=nm[target]['tcp']
+for port in ports:
+    print "\n%s\t%s\t%s\t\t%s\t%s" % (port, ports[port]['state'], ports[port]['version'], ports[port]['name'], ports[port]['product'])
 print('===========================================')
 print('')
-if 80 in port80:
+if '80' in ports:
     print('Get a drink or something')
     print('\n  ___'
     	+'\n /         |'
