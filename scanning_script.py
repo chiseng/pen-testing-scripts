@@ -48,12 +48,12 @@ print('Nmap service running')
 target=sys.argv[1]
 nm=nmap.PortScanner()
 nm.scan(hosts=target, arguments='-sV') #print product, state, version, name
-print("Port\tState\tVersion\tType\tService")
+print("Port\tState\tVersion\tType\t\tService")
 ports=nm[target]['tcp']
 portlist=[]
 for port in ports:
     portlist.append(port)
-    print("\n%s\t%s\t%s\t%s\t%s" % (port, ports[port]['state'], ports[port]['version'], ports[port]['name'], ports[port]['product']))
+    print("\n%s\t%s\t%s\t%s\t\t%s" % (port, ports[port]['state'], ports[port]['version'], ports[port]['name'], ports[port]['product']))
 print('===========================================')
 print('')
 if '80' in portlist:
