@@ -2,7 +2,11 @@
 import subprocess
 import sys
 import os
-
+'''
+#################################################
+# Very generic payload creator
+#################################################
+'''
 def processor(process): #huge creds to phi10s 
     output=""
     while process.poll() is None:
