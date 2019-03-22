@@ -57,7 +57,7 @@ for port in ports:
     print("\n%s\t%s\t%s\t%s\t\t%s" % (port, ports[port]['state'], ports[port]['version'], ports[port]['name'], ports[port]['product']))
 print('===========================================')
 print('')
-if '80' in portlist && argv[2]=='brute':
+if '80' in portlist and argv[2]=='brute':
     print('Get a drink or something')
     print('\n  ___'
     	+'\n /         |'
