@@ -2,6 +2,7 @@
 
 
 #Run file as following: scanning_script.py <target host IP> y (if you want dirs to be created to store stuff)
+#Make sure that SecLists is installed before running. Run apt-get install SecLists
 import subprocess
 import nmap
 import sys
@@ -11,7 +12,7 @@ import os
 try:
     target=sys.argv[1]
 except IndexError:
-    print('Example: ./scanning_script.py <rhost> <y to create custom folders>')
+    print('Example: ./scanning_script.py <rhost> <brute> <y to create custom folders>')
     sys.exit(-1) #exit when error
 
 #use pipelining to ensure the process run correctly. 
@@ -56,7 +57,7 @@ for port in ports:
     print("\n%s\t%s\t%s\t%s\t\t%s" % (port, ports[port]['state'], ports[port]['version'], ports[port]['name'], ports[port]['product']))
 print('===========================================')
 print('')
-if '80' in portlist:
+if '80' in portlist && argv[2]=='brute':
     print('Get a drink or something')
     print('\n  ___'
     	+'\n /         |'
